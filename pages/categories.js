@@ -1,8 +1,10 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { withSwal } from "react-sweetalert2";
 
-const Categories = () => {
+const Categories = ({ swal }) => {
+  const [editedCategory, setEditedCategory] = useState(null);
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [parentCategory, setParentCategory] = useState("");
@@ -10,20 +12,60 @@ const Categories = () => {
     fetchCategories();
   }, []);
   const fetchCategories = async () => {
-    axios.get("/api/categories").then((result) => {
+    await axios.get("/api/categories").then((result) => {
       setCategories(result.data);
     });
   };
-  const saveCategory = (ev) => {
+  const saveCategory = async (ev) => {
     ev.preventDefault();
-    axios.post("/api/categories", { name });
+    const data = { name, parentCategory };
+    if (editedCategory) {
+      data._id = editedCategory._id;
+      await axios.put("/api/categories", data);
+      setEditedCategory(null);
+    } else {
+      await axios.post("/api/categories", data);
+    }
     setName("");
     fetchCategories();
   };
+
+  const editCategory = async (category) => {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category.parent?._id);
+  };
+
+  const deleteCategory = async (category) => {
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: `Do you want to delete ${category.name}?`,
+        showCancelButton: true,
+        cancelButtonTitle: "Cancel",
+        confirmButtonText: "Yes, delete!",
+        confirmButtonColor: "#d55",
+        reverseButtons: true,
+        didOpen: () => {},
+        didClose: () => {},
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          const { _id } = category;
+          await axios.delete("api/categories?_id=" + _id);
+          fetchCategories();
+        }
+      });
+  };
+
   return (
     <Layout>
       <h1>Categories</h1>
-      <label>New category name</label>
+      <label>
+        {editedCategory
+          ? `Edit category ${editedCategory.name}`
+          : "Create new category"}
+      </label>
       <form onSubmit={saveCategory} className="flex gap-1">
         <input
           type="text"
@@ -32,8 +74,12 @@ const Categories = () => {
           onChange={(ev) => setName(ev.target.value)}
           value={name}
         />
-        <select className="mb-0" value={parentCategory}>
-          <option value="0">No parent category</option>
+        <select
+          className="mb-0"
+          onChange={(ev) => setParentCategory(ev.target.value)}
+          value={parentCategory}
+        >
+          <option value="">No parent category</option>
           {categories.length > 0 &&
             categories.map((category) => {
               return <option value={category._id}>{category.name}</option>;
@@ -47,6 +93,8 @@ const Categories = () => {
         <thead>
           <tr>
             <td>Category name</td>
+            <td>Parent category</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
@@ -55,6 +103,23 @@ const Categories = () => {
               return (
                 <tr>
                   <td>{category.name}</td>
+                  <td>{category?.parent?.name}</td>
+                  <td>
+                    <button
+                      className="btn-primary mr-1"
+                      onClick={() => {
+                        editCategory(category);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteCategory(category)}
+                      className="btn-primary"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -64,4 +129,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
