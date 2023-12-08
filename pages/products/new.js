@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import ProductForm from "./ProductForm";
+import ProductForm from "../../components/ProductForm";
 
 const NewProduct = () => {
   return (

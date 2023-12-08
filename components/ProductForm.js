@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Spinner from "@/components/Spinner";
+import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
 
-const ProductForm = ({
+export default function ProductForm({
   _id,
   title: existingTitle,
   description: existingDescription,
@@ -12,7 +12,7 @@ const ProductForm = ({
   images: existingImages,
   category: assignedCategory,
   properties: assignedProperties,
-}) => {
+}) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [category, setCategory] = useState(assignedCategory || "");
@@ -22,7 +22,7 @@ const ProductForm = ({
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   const [goToProducts, setGoToProducts] = useState(false);
-  const [isUpLoading, setIsUpLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [categories, setCategories] = useState([]);
   const router = useRouter();
 
@@ -52,11 +52,10 @@ const ProductForm = ({
   if (goToProducts) {
     router.push("/products");
   }
-
-  const uploadImage = async (ev) => {
+  async function uploadImages(ev) {
     const files = ev.target?.files;
-    if (files.length > 0) {
-      setIsUpLoading(true);
+    if (files?.length > 0) {
+      setIsUploading(true);
       const data = new FormData();
       for (const file of files) {
         data.append("file", file);
@@ -65,21 +64,21 @@ const ProductForm = ({
       setImages((oldImages) => {
         return [...oldImages, ...res.data.links];
       });
-      setIsUpLoading(false);
+      setIsUploading(false);
     }
-  };
+  }
 
-  const updateImagesOrder = (images) => {
+  function updateImagesOrder(images) {
     setImages(images);
-  };
+  }
 
-  const setProductProp = (propName, value) => {
+  function setProductProp(propName, value) {
     setProductProperties((prev) => {
       const newProductProps = { ...prev };
       newProductProps[propName] = value;
       return newProductProps;
     });
-  };
+  }
 
   const propertiesToFill = [];
   if (categories.length > 0 && category) {
@@ -99,67 +98,62 @@ const ProductForm = ({
       <label>Product name</label>
       <input
         type="text"
-        placeholder="product name..."
+        placeholder="product name"
         value={title}
-        onChange={(ev) => {
-          setTitle(ev.target.value);
-        }}
-      />
+        onChange={(ev) => setTitle(ev.target.value)}
+      ></input>
+
       <label>Category</label>
       <select value={category} onChange={(ev) => setCategory(ev.target.value)}>
         <option value="">Uncategorized</option>
         {categories.length > 0 &&
-          categories.map((category) => {
-            return (
-              <option value={category._id} key={category._id}>
-                {category.name}
-              </option>
-            );
-          })}
+          categories.map((c, index) => (
+            <option key={index} value={c._id}>
+              {c.name}
+            </option>
+          ))}
       </select>
       {propertiesToFill.length > 0 &&
-        propertiesToFill.map((p) => {
-          return (
-            <div className="flex gap-1">
-              <div>{p.name}</div>
-              <select
-                value={productProperties[p.name]}
-                onChange={(ev) => setProductProp(p.name, ev.target.value)}
-              >
-                {p.values.map((v) => (
-                  <option value={v}>{v}</option>
-                ))}
-              </select>
-            </div>
-          );
-        })}
+        propertiesToFill.map((p) => (
+          <div className="flex gap-1" key={p}>
+            <div>{p.name}</div>
+            <select
+              value={productProperties[p.name]}
+              onChange={(ev) => setProductProp(p.name, ev.target.value)}
+            >
+              {p.values.map((v, i) => (
+                <option value={v} key={i}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable
           list={images}
-          setList={updateImagesOrder}
           className="flex flex-wrap gap-1"
+          setList={updateImagesOrder}
         >
           {!!images?.length &&
-            images.map((link) => {
-              return (
-                <div key={link} className="inline-block h-24">
-                  <img src={link} alt="" className="rounded-lg" />
-                </div>
-              );
-            })}
+            images.map((link) => (
+              <div key={link} className=" h-24">
+                <img src={link} alt="" className="rounded-lg" />
+              </div>
+            ))}
         </ReactSortable>
-        {isUpLoading && (
+        {isUploading && (
           <div className="h-24 flex items-center">
             <Spinner />
           </div>
         )}
-        <label className="w-24 h-24 cursor-pointer text-center flex items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-200">
+        <label className=" w-24 h-24 cursor-pointer text-center flex items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            strokeWidth={1.5}
+            strokeWidth="1.5"
             stroke="currentColor"
             className="w-6 h-6"
           >
@@ -170,31 +164,28 @@ const ProductForm = ({
             />
           </svg>
           <div>Upload</div>
-          <input type="file" onChange={uploadImage} className="hidden" />
+          <input type="file" onChange={uploadImages} className="hidden" />
         </label>
       </div>
+
       <label>Description</label>
       <textarea
         placeholder="description"
         value={description}
-        onChange={(ev) => {
-          setDescription(ev.target.value);
-        }}
+        onChange={(ev) => setDescription(ev.target.value)}
       ></textarea>
+
       <label>Price (in USD)</label>
       <input
         type="number"
         placeholder="price"
         value={price}
-        onChange={(ev) => {
-          setPrice(ev.target.value);
-        }}
-      />
+        onChange={(ev) => setPrice(ev.target.value)}
+      ></input>
+
       <button type="submit" className="btn-primary">
         Save
       </button>
     </form>
   );
-};
-
-export default ProductForm;
+}

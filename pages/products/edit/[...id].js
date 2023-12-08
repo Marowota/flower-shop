@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import ProductForm from "../ProductForm";
+import ProductForm from "../../../components/ProductForm";
 
 const EditProductPage = () => {
   const [productInfo, setProductInfo] = useState(null);
