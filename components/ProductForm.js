@@ -12,6 +12,7 @@ export default function ProductForm({
   images: existingImages,
   category: assignedCategory,
   properties: assignedProperties,
+  discount: existingDiscount,
 }) {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
@@ -19,7 +20,8 @@ export default function ProductForm({
   const [productProperties, setProductProperties] = useState(
     assignedProperties || {}
   );
-  const [price, setPrice] = useState(existingPrice || "");
+  const [price, setPrice] = useState(existingPrice || 0);
+  const [discount, setDiscount] = useState(existingDiscount || 0);
   const [images, setImages] = useState(existingImages || []);
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -41,6 +43,7 @@ export default function ProductForm({
       images,
       category,
       properties: productProperties,
+      discount,
     };
     if (_id) {
       await axios.put("/api/products", { ...data, _id });
@@ -175,12 +178,19 @@ export default function ProductForm({
         onChange={(ev) => setDescription(ev.target.value)}
       ></textarea>
 
-      <label>Price (in USD)</label>
+      <label>Price (in VND)</label>
       <input
         type="number"
         placeholder="price"
         value={price}
         onChange={(ev) => setPrice(ev.target.value)}
+      ></input>
+      <label>Discount (in %)</label>
+      <input
+        type="number"
+        placeholder="discount"
+        value={discount}
+        onChange={(ev) => setDiscount(ev.target.value)}
       ></input>
 
       <button type="submit" className="btn-primary">
