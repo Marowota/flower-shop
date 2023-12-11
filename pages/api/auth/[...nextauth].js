@@ -3,7 +3,11 @@ import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 
-const adminEmails = ["hoangducmanh254@gmail.com", "gokudeptrai1@gmail.com"];
+const adminEmails = [
+  "hoangducmanh254@gmail.com",
+  "gokudeptrai1@gmail.com",
+  "21520405@gm.uit.edu.vn",
+];
 
 export const authOptions = {
   providers: [
