@@ -24,7 +24,7 @@ export default function OrdersPage() {
         <tbody>
           {orders.length > 0 &&
             orders.map((order) => (
-              <tr key={order}>
+              <tr key={order} className="border border-b">
                 <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td className={order.paid ? "text-green-600" : "text-red-600"}>
                   {order.paid ? "YES" : "NO"}
