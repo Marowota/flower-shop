@@ -30,12 +30,9 @@ export default function OrdersPage() {
                   {order.paid ? "YES" : "NO"}
                 </td>
                 <td>
-                  {order.name}
-                  {order.email}
+                  {order.name}-{order.email}
                   <br />
-                  {order.city}
-                  {order.postalCode}
-                  {order.country}
+                  {order.city}-{order.postalCode}-{order.country}
                   <br />
                   {order.streetAddress}
                 </td>
