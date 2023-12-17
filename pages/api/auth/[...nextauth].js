@@ -7,6 +7,7 @@ const adminEmails = [
   "hoangducmanh254@gmail.com",
   "gokudeptrai1@gmail.com",
   "21520405@gm.uit.edu.vn",
+  "truongbaoduy2003@gmail.com"
 ];
 
 export const authOptions = {
