@@ -47,7 +47,7 @@ export default function HomeStats() {
 
   return (
     <div>
-      <h2>Orders</h2>
+      <div className="text-lg my-1 font-semibold">Orders</div>
       <div className="tiles-grid">
         <div className="tile">
           <h3 className="tile-header">Today</h3>
@@ -68,7 +68,7 @@ export default function HomeStats() {
         </div>
       </div>
 
-      <h2>Revenue</h2>
+      <div className="text-lg mb-1 mt-5 font-semibold">Revenue</div>
       <div className="tiles-grid">
         <div className="tile">
           <h3 className="tile-header">Today</h3>
