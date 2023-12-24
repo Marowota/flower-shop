@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Meta from "@/components/Meta";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -111,6 +112,7 @@ const Categories = ({ swal }) => {
 
   return (
     <Layout>
+      <Meta title="Categories" />
       <h1>Categories</h1>
       <label>
         {editedCategory

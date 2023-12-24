@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Meta from "@/components/Meta";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -48,6 +49,7 @@ function SettingsPage({ swal }) {
 
   return (
     <Layout>
+      <Meta title="Settings" />
       <h1>Settings</h1>
       {isLoading && <Spinner />}
       {!isLoading && (

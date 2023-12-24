@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Meta from "@/components/Meta";
 import Spinner from "@/components/Spinner";
 import { prettyDate } from "@/lib/date";
 import { Admin } from "@/models/Admin";
@@ -70,9 +71,10 @@ function AdminsPage({ swal }) {
 
   return (
     <Layout>
+      <Meta title="Admins" />
       <h1>Admins</h1>
 
-      <h2>Add new admmins</h2>
+      <h2>Add new admins</h2>
       <form onSubmit={addAdmin}>
         <div className="flex gap-2">
           <input

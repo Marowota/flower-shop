@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Meta from "@/components/Meta";
 
 const DeleteProductPage = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const DeleteProductPage = () => {
   };
   return (
     <Layout>
+      <Meta title="Delete product" />
       <h1 className="text-center">
         Do you really want to delete &nbsp;"{productInfo.title}"?
       </h1>

@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Meta from "@/components/Meta";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -15,6 +16,7 @@ export default function OrdersPage() {
   }, []);
   return (
     <Layout>
+      <Meta title="Orders" />
       <h1>Orders</h1>
       <table className="basic">
         <thead>

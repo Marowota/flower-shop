@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import ProductForm from "../../../components/ProductForm";
 import Spinner from "@/components/Spinner";
+import Meta from "@/components/Meta";
 
 const EditProductPage = () => {
   const [productInfo, setProductInfo] = useState(null);
@@ -20,6 +21,7 @@ const EditProductPage = () => {
   }, [id]);
   return (
     <Layout>
+      <Meta title="Edit product" />
       <h1>Edit product</h1>
       {isLoading && <Spinner />}
       {productInfo && <ProductForm {...productInfo} />}

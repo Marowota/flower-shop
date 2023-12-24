@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Meta from "@/components/Meta";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import Link from "next/link";
@@ -16,6 +17,7 @@ const Products = () => {
   }, []);
   return (
     <Layout>
+      <Meta title="Products" />
       <Link className="btn-primary" href="/products/new">
         Add new product
       </Link>
